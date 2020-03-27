@@ -9,13 +9,15 @@ exports.getAllUsers = async (req, res) => {
     console.log(err);
   }
 };
-exports.createUsesr = (req, res) => {
+exports.createUser = (req, res) => {
+  console.log(red.body)
   const { name, surname, location, temperature, gender } = req.body;
   const user = new User({ name, surname, location, temperature });
   user.save((err, user) => {
     if (err) {
-      return res.status(400).send({ message: 'Something went wrong' });
       console.log(err);
+      return res.status(400).send({ message: 'Something went wrong' });
+      
     }
     res.set({
       'Access-Control-Allow-Origin': '*',
