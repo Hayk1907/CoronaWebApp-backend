@@ -4,6 +4,6 @@ const { getAllUsers } = require('../handlers/user.handler');
 
 const router = Router();
 
-router.get('/usesrs', getAllUsers);
+router.get('/users', getAllUsers);
 
 module.exports = router;
