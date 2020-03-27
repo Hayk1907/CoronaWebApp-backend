@@ -17,6 +17,14 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  date: {
+    type: Date,
+    default: new Date(Date.now()),
+  },
+  gender: {
+    type: String,
+    required: true,
+  },
 });
 
 module.exports = model('user', userSchema);
