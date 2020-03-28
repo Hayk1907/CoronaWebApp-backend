@@ -31,7 +31,7 @@ exports.createUser = (req, res) => {
 exports.getUserById = async (req, res) => {
   try {
     const _id = req.params.id;
-    const user = await Users.findOne({ _id });
+    const user = await User.findOne({ _id });
     return res.status(201).send(user);
   } catch (err) {
     res.status(500).send({ message: 'Something went wrong' });
