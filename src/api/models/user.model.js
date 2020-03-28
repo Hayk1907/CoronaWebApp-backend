@@ -9,12 +9,16 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
-  location: {
-    type: String,
-    //required: true,
+  lat: {
+    type: Number,
+    required: true,
+  },
+  long: {
+    type: Number,
+    required: true,
   },
   temperature: {
-    type: String,
+    type: Number,
     required: true,
   },
   date: {

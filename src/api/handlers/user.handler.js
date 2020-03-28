@@ -11,8 +11,8 @@ exports.getAllUsers = async (req, res) => {
 };
 exports.createUser = (req, res) => {
   console.log(req.body)
-  const { name, surname, location, temperature, gender } = req.body;
-  const user = new User({ name, surname, location, temperature , gender});
+  const { name, surname, long,lat, temperature, gender } = req.body;
+  const user = new User({ name, surname, long, lat, temperature , gender});
   user.save((err, user) => {
     if (err) {
       console.log(err);
@@ -21,8 +21,8 @@ exports.createUser = (req, res) => {
     }
     res.set({
       'Access-Control-Allow-Origin': '*',
-      'Access-Control-Expose-Headers': 'user',
-      user: user._id,
+      'Access-Control-Expose-Headers': 'userId',
+      userId: user._id,
     });
     return res.status(201).send(user);
   });
