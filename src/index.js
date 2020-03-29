@@ -23,3 +23,17 @@ const server = app.listen(config.server.port, () => {
 });
 
 db();
+
+const io = require('socket.io')(server);
+
+io.on('connection', socket => {
+  console.log("Socket************");
+  
+  socket.on('CREATE_USER', user => { 
+    console.log("getUser*****");
+    
+    socket.emit("NEW_PACIENT", user)
+    console.log("sendUser********");
+    
+  })
+});
