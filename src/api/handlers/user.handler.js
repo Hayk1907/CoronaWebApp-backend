@@ -10,14 +10,12 @@ exports.getAllUsers = async (req, res) => {
   }
 };
 exports.createUser = (req, res) => {
-  console.log(req.body)
-  const { name, surname, long,lat, temperature, gender } = req.body;
-  const user = new User({ name, surname, long, lat, temperature , gender});
+  const { name, surname, long, lat, temperature, gender } = req.body;
+  const user = new User({ name, surname, long, lat, temperature, gender });
   user.save((err, user) => {
     if (err) {
       console.log(err);
       return res.status(400).send({ message: 'Something went wrong' });
-      
     }
     res.set({
       'Access-Control-Allow-Origin': '*',
