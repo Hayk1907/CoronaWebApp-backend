@@ -24,7 +24,7 @@ const server = app.listen(config.server.port, () => {
 
 db();
 
-exports.io = require('socket.io')(server);
+const io = require('socket.io')(server);
 
 io.on('connection', socket => {
   socket.on('CREATE_USER', user => {
