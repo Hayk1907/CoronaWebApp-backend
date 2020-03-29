@@ -1,4 +1,4 @@
-const io = require('../index');
+const { io } = require('../index');
 
 io.on('connection', socket => {
   socket.on('CREATE_USER', user => {
