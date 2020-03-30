@@ -2,13 +2,36 @@ const User = require('../models/user.model');
 
 exports.getAllUsers = async (req, res) => {
   try {
-    const users = await User.find({});
+    const lat = req.query.lat;
+    const long = req.query.long;
+    const roundLatUp = Math.ceil(Number(lat)) + 0.5;
+    const roundLatDown = Math.floor(Number(lat)) - 0.5;
+    const roundLongUp = Math.ceil(Number(long)) - 0.6;
+    const roundLongDown = Math.floor(Number(long)) - 0.6;
+    console.log(lat, '*lat*', roundLatUp, roundLatDown);
+    console.log(typeof roundLatDown);
+
+    console.log(long, '*long*', roundLongUp, roundLongDown);
+    const users = await User.find({
+      lat: { $gt: roundLatDown, $lt: roundLatUp },
+      //long: { $gt: roundLongUp, $lt: roundLongDown },
+    }).sort({ date: -1 });
+    // .where('lat')
+    // .gt(roundLatDown)
+    // .lt(roundLatUp)
+    // .where('long')
+    // .gt(roundLongUp)
+    // .lt(roundLongDown);
+    console.log(users);
+
     res.status(200).send(users);
   } catch (err) {
     res.status(500).send({ message: 'Something went wrong' });
     console.log(err);
   }
 };
+// ceil verev
+// floor nerqev
 exports.createUser = (req, res) => {
   const { name, surname, long, lat, temperature, gender } = req.body;
   const user = new User({ name, surname, long, lat, temperature, gender });
