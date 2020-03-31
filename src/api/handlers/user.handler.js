@@ -16,7 +16,6 @@ exports.getAllUsers = async (req, res) => {
         },
       },
     }).sort({ date: -1 });
-    console.log(users);
     const filteredUsers = users.map(user => {
       return {
         name: user.name,
