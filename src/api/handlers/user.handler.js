@@ -4,14 +4,13 @@ exports.getAllUsers = async (req, res) => {
   try {
     const lat = req.query.lat;
     const long = req.query.long;
-    const coordinates = [long, lat];
     const users = await User.find({
       location: {
         $near: {
           $maxDistance: 1000,
           $geometry: {
             type: 'Point',
-            coordinates,
+            coordinates: [long, lat],
           },
         },
       },
