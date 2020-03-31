@@ -17,7 +17,7 @@ exports.getAllUsers = async (req, res) => {
       },
     }).sort({ date: -1 });
     console.log(users);
-    const filteredtUsers = users.map(user => {
+    const filteredUsers = users.map(user => {
       return {
         name: user.name,
         surname: user.surname,
@@ -28,7 +28,7 @@ exports.getAllUsers = async (req, res) => {
       }
     })
     
-    return res.status(200).send(filtertedUsers);
+    return res.status(200).send(filteredUsers);
   } catch (err) {
     res.status(500).send({ message: 'Something went wrong' });
     console.log(err);
