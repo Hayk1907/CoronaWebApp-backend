@@ -4,27 +4,31 @@ exports.getAllUsers = async (req, res) => {
   try {
     const lat = req.query.lat;
     const long = req.query.long;
+    const coordinates = [long, lat];
     const users = await User.find({
       location: {
         $near: {
           $maxDistance: 1000,
           $geometry: {
             type: 'Point',
-            coordinates: [long, lat],
+            coordinates,
           },
         },
       },
     }).sort({ date: -1 });
     console.log(users);
-
-    return res.status(200).send({
-      name: users.name,
-      surname: users.surname,
-      long: users.location.coordinates[0],
-      lat: users.location.coordinates[1],
-      temperature: users.temperature,
-      gender: users.gender,
-    });
+    const filteredtUsers = users.map(user => {
+      return {
+        name: user.name,
+        surname: user.surname,
+        long: user.location.coordinates[0],
+        lat: user.location.coordinates[1],
+        temperature: user.temperature,
+        gender: user.gender,
+      }
+    })
+    
+    return res.status(200).send(filtertedUsers);
   } catch (err) {
     res.status(500).send({ message: 'Something went wrong' });
     console.log(err);
