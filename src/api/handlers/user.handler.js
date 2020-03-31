@@ -4,41 +4,47 @@ exports.getAllUsers = async (req, res) => {
   try {
     const lat = req.query.lat;
     const long = req.query.long;
-    const roundLatUp = Math.ceil(Number(lat)) + 0.5;
-    const roundLatDown = Math.floor(Number(lat)) - 0.5;
-    const roundLongUp = Math.ceil(Number(long)) - 0.6;
-    const roundLongDown = Math.floor(Number(long)) - 0.6;
-    console.log(lat, '*lat*', roundLatUp, roundLatDown);
-    console.log(typeof roundLatDown);
-
-    console.log(long, '*long*', roundLongUp, roundLongDown);
+    const coordinates = [long, lat];
     const users = await User.find({
-      lat: { $gt: roundLatDown, $lt: roundLatUp },
-      //long: { $gt: roundLongUp, $lt: roundLongDown },
+      location: {
+        $near: {
+          $maxDistance: 1000,
+          $geometry: {
+            type: 'Point',
+            coordinates,
+          },
+        },
+      },
     }).sort({ date: -1 });
-    // .where('lat')
-    // .gt(roundLatDown)
-    // .lt(roundLatUp)
-    // .where('long')
-    // .gt(roundLongUp)
-    // .lt(roundLongDown);
     console.log(users);
 
-    res.status(200).send(users);
+    return res.status(200).send({
+      name: users.name,
+      surname: users.surname,
+      long: users.location.coordinates[0],
+      lat: users.location.coordinates[1],
+      temperature: users.temperature,
+      gender: users.gender,
+    });
   } catch (err) {
     res.status(500).send({ message: 'Something went wrong' });
     console.log(err);
   }
 };
-// ceil verev
-// floor nerqev
 exports.createUser = (req, res) => {
   const { name, surname, long, lat, temperature, gender } = req.body;
-  const user = new User({ name, surname, long, lat, temperature, gender });
+  const coordinates = [long, lat];
+  const user = new User({
+    name,
+    surname,
+    location: { type: 'Point', coordinates },
+    temperature,
+    gender,
+  });
   user.save((err, user) => {
     if (err) {
       console.log(err);
-      return res.status(400).send({ message: 'Something went wrong' });
+      return res.status(500).send({ message: 'Something went wrong' });
     }
     res.set({
       'Access-Control-Allow-Origin': '*',
@@ -52,8 +58,23 @@ exports.createUser = (req, res) => {
 exports.getUserById = async (req, res) => {
   try {
     const _id = req.params.id;
-    const user = await User.findOne({ _id });
-    return res.status(201).send(user);
+    const {
+      name,
+      surname,
+      location,
+      temperature,
+      gender,
+    } = await User.findOne({ _id });
+    return res
+      .status(201)
+      .send({
+        name,
+        surname,
+        long: location.coordinates[0],
+        lat: location.coordinates[1],
+        temperature,
+        gender,
+      });
   } catch (err) {
     res.status(500).send({ message: 'Something went wrong' });
     console.log(err);

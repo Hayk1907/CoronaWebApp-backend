@@ -11,11 +11,9 @@ const userSchema = new Schema({
   },
   lat: {
     type: Number,
-    required: true,
   },
   long: {
     type: Number,
-    required: true,
   },
   temperature: {
     type: Number,
@@ -29,6 +27,12 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  location: {
+    type: { type: String },
+    coordinates: [],
+  },
 });
+
+userSchema.index({ location: "2dsphere" });
 
 module.exports = model('user', userSchema);
